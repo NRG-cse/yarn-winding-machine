@@ -2,73 +2,69 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>VFD HMI PANEL</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>16-Machine VFD HMI Panel</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="hmi-container">
-        <!-- Header -->
-        <header class="dashboard-header">
-            <h1 class="dashboard-title">VFD CONTROL PANEL</h1>
-            <!-- <div class="dashboard-subtitle">16 MACHINES • YASKAWA A1000 • INDUSTRIAL HMI</div> -->
-            <div class="datetime" id="datetime"></div>
-        </header>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Page 1 (Machines 1-8) -->
-            <div class="page active" id="page1">
-                <div class="machines-grid" id="machinesGrid1"></div>
-            </div>
+<div class="hmi-container">
 
-            <!-- Page 2 (Machines 9-16) -->
-            <div class="page hidden" id="page2">
-                <div class="machines-grid" id="machinesGrid2"></div>
-            </div>
+    <!-- HEADER -->
+    <header class="dashboard-header">
+        <h1 class="dashboard-title">VFD CONTROL PANEL</h1>
+        <div class="datetime" id="datetime"></div>
+    </header>
+
+    <!-- MAIN -->
+    <div class="main-content">
+        <div class="page" id="page1">
+            <div class="machines-grid" id="machinesGrid1"></div>
         </div>
+        <div class="page hidden" id="page2">
+            <div class="machines-grid" id="machinesGrid2"></div>
+        </div>
+    </div>
 
-        <!-- Pagination Controls -->
-        <div class="pagination-container">
-            <button class="page-nav-btn" id="prevPageBtn" disabled>◄</button>
-            
+    <!-- FOOTER -->
+    <div class="pagination-container">
+        <button class="page-nav-btn" id="prevPageBtn">◄</button>
+
+        <div class="footer-center">
             <div class="page-info">
-                <span id="currentPage">PAGE 1</span> / <span id="totalPages">2</span>
+                <span id="currentPage">PAGE 1</span> /
+                <span id="totalPages">2</span>
             </div>
-            
+
             <div class="global-controls">
                 <button class="global-btn global-start" id="globalStart">START ALL</button>
                 <button class="global-btn global-stop" id="globalStop">STOP ALL</button>
                 <button class="global-btn global-reset" id="globalReset">RESET ALL</button>
             </div>
-            
-            <button class="page-nav-btn" id="nextPageBtn">►</button>
         </div>
 
-        <!-- Status Bar -->
-        <div class="status-bar">
-            <div class="system-status">
-                <div class="status-indicator"></div>
-                <div class="status-text" id="globalStatus">SYSTEM READY • 0 ACTIVE • 0 RUNNING</div>
-            </div>
-        </div>
+        <button class="page-nav-btn" id="nextPageBtn">►</button>
     </div>
 
-    <!-- Modal for Setting Values -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-content">
-            <h2 class="modal-title">SET VALUE</h2>
-            <div class="modal-input-container">
-                <label class="modal-label" id="modalMachineLabel">Machine CH01</label>
-                <input type="text" class="modal-input" id="modalInput" value="880F" maxlength="4">
-            </div>
-            <div class="modal-buttons">
-                <button class="modal-btn modal-save" id="modalSave">SAVE</button>
-                <button class="modal-btn modal-cancel" id="modalCancel">CANCEL</button>
-            </div>
+    <!-- STATUS -->
+    <div class="status-bar">
+        <div class="status-text" id="globalStatus"></div>
+    </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="settingsModal">
+    <div class="modal-content">
+        <h2>SET VALUE</h2>
+        <p id="modalMachineLabel"></p>
+        <input id="modalInput" maxlength="4" placeholder="____">
+        <div class="modal-buttons">
+            <button id="modalSave">SAVE</button>
+            <button id="modalCancel">CANCEL</button>
         </div>
     </div>
+</div>
 
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
