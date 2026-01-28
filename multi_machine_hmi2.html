@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CHOISE+ | VFD HMI PANEL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div class="hmi-container">
+
+    <!-- HEADER -->
+    <header class="dashboard-header">
+        <div class="brand-section">
+            <div class="brand-logo">CHOISE<span class="brand-plus">+</span></div>
+            <div class="serial-number">99999</div>
+        </div>
+        <h1 class="dashboard-title">VFD CONTROL PANEL</h1>
+        <div class="datetime" id="datetime"></div>
+    </header>
+
+    <!-- MAIN - SINGLE PAGE WITH 16 MACHINES -->
+    <div class="main-content">
+        <div class="machines-grid" id="machinesGrid"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-container">
+        <div class="footer-left">
+            <div class="performance-meter">
+                <div class="meter-label">EFFICIENCY</div>
+                <div class="meter-value" id="globalEfficiency">89%</div>
+                <div class="meter-bar">
+                    <div class="meter-fill" style="width: 89%"></div>
+                </div>
+            </div>
+            <div class="total-count">
+                <div class="count-label">TOTAL COUNT</div>
+                <div class="count-value">80+k</div>
+                <div class="count-sub">1234</div>
+            </div>
+        </div>
+
+        <div class="footer-center">
+            <div class="global-controls">
+                <button class="global-btn global-start" id="globalStart">START ALL</button>
+                <button class="global-btn global-stop" id="globalStop">STOP ALL</button>
+                <button class="global-btn global-reset" id="globalReset">RESET ALL</button>
+            </div>
+            
+            <div class="friends-counter">
+                <div class="friends-label">FRIENDS</div>
+                <div class="friends-value">89%</div>
+            </div>
+        </div>
+
+        <div class="footer-right">
+            <div class="system-info">
+                <div class="info-label">SYSTEM STATUS</div>
+                <div class="info-value" id="systemStatus">ONLINE</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATUS -->
+    <div class="status-bar">
+        <div class="status-text" id="globalStatus"></div>
+    </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal" id="settingsModal">
+    <div class="modal-content">
+        <h2>SET VALUE</h2>
+        <p id="modalMachineLabel"></p>
+        <input id="modalInput" maxlength="4" placeholder="____">
+        <div class="modal-buttons">
+            <button id="modalSave">SAVE</button>
+            <button id="modalCancel">CANCEL</button>
+        </div>
+    </div>
+</div>
+
+<!-- CHANNEL CONTROLLER MODAL -->
+<div class="modal" id="channelControllerModal">
+    <div class="channel-controller-modal">
+        <div class="controller-container">
+            <div class="header">
+                <h1 id="controllerTitle">Channel Controller</h1>
+                <p>Control and monitor device channel</p>
+                <button class="close-controller" id="closeController">&times;</button>
+            </div>
+            
+            <div class="control-section">
+                <div class="section-title">Channel Control</div>
+                <div class="channel-selector">
+                    <div class="channel-info">
+                        <span class="channel-label" id="controllerChannelLabel">CH</span>
+                        <div class="channel-number" id="controller-channel">02</div>
+                    </div>
+                    <div class="controls">
+                        <button class="set-button" id="controller-set-button">
+                            <i class="fas fa-cog"></i> SET
+                        </button>
+                    </div>
+                    <div class="value-display" id="controller-set-value">5500</div>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="control-section">
+                <div class="section-title">Power Control</div>
+                <div class="toggle-section">
+                    <div class="toggle-container">
+                        <span class="toggle-label">ON/OFF</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="controller-power-toggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="count-section">
+                        <span class="count-label">COUNT</span>
+                        <div class="count-value" id="controller-count-value">1234</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="control-section">
+                <div class="section-title">System Control</div>
+                <div class="reset-section">
+                    <button class="reset-button" id="controller-reset-button">
+                        <i class="fas fa-redo"></i> RESET
+                    </button>
+                    <div class="efficiency-section">
+                        <span class="efficiency-label">Efficiency</span>
+                        <div class="efficiency-value" id="controller-efficiency-value">92%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="script2.js"></script>
+</body>
+</html>

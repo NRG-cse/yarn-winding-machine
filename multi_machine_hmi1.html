@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VFD HMI PANEL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+
+<div class="hmi-container">
+
+    <!-- HEADER -->
+    <header class="dashboard-header">
+        <h1 class="dashboard-title">VFD CONTROL PANEL</h1>
+        <div class="datetime" id="datetime"></div>
+    </header>
+
+    <!-- MAIN -->
+    <div class="main-content">
+        <div class="page" id="page1">
+            <div class="machines-grid" id="machinesGrid1"></div>
+        </div>
+        <div class="page hidden" id="page2">
+            <div class="machines-grid" id="machinesGrid2"></div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="pagination-container">
+        <button class="page-nav-btn" id="prevPageBtn">◄</button>
+
+        <div class="footer-center">
+            <div class="page-info">
+                <span id="currentPage">PAGE 1</span> /
+                <span id="totalPages">2</span>
+            </div>
+
+            <div class="global-controls">
+                <button class="global-btn global-start" id="globalStart">START ALL</button>
+                <button class="global-btn global-stop" id="globalStop">STOP ALL</button>
+                <button class="global-btn global-reset" id="globalReset">RESET ALL</button>
+            </div>
+        </div>
+
+        <button class="page-nav-btn" id="nextPageBtn">►</button>
+    </div>
+
+    <!-- STATUS -->
+    <div class="status-bar">
+        <div class="status-text" id="globalStatus"></div>
+    </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="settings
+Modal">
+    <div class="modal-content">
+        <h2>SET VALUE</h2>
+        <p id="modalMachineLabel"></p>
+        <input id="modalInput" maxlength="4" placeholder="____">
+        <div class="modal-buttons">
+            <button id="modalSave">SAVE</button>
+            <button id="modalCancel">CANCEL</button>
+        </div>
+    </div>
+</div>
+
+<script src="script1.js"></script>
+</body>
+</html>

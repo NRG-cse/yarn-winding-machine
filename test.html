@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Channel Controller</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .controller-container {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .header h1 {
+            color: #4a9eff;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+        
+        .header p {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .control-section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            color: #888;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            padding-left: 5px;
+        }
+        
+        .channel-selector {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #252525;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            border: 1px solid #333;
+        }
+        
+        .channel-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .channel-label {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            color: #e0e0e0;
+        }
+        
+        .channel-number {
+            background-color: #2d2d2d;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #4a9eff;
+            border: 1px solid #3a3a3a;
+        }
+        
+        .set-button {
+            background-color: #2a5caa;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .set-button:hover {
+            background-color: #3a6cba;
+        }
+        
+        .set-button i {
+            margin-right: 8px;
+        }
+        
+        .value-display {
+            background-color: #0a1a2d;
+            color: #4a9eff;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            border: 1px solid #1a3a5d;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .toggle-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #252525;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            border: 1px solid #333;
+        }
+        
+        .toggle-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .toggle-label {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            color: #e0e0e0;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #444;
+            border-radius: 34px;
+            transition: .4s;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .4s;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #2a5caa;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+        
+        .count-section {
+            display: flex;
+            align-items: center;
+        }
+        
+        .count-label {
+            font-weight: 600;
+            margin-right: 15px;
+            color: #888;
+        }
+        
+        .count-value {
+            background-color: #0a1a2d;
+            color: #4a9eff;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            border: 1px solid #1a3a5d;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .reset-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #252525;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        
+        .reset-button {
+            background-color: #aa2a2a;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .reset-button:hover {
+            background-color: #ba3a3a;
+        }
+        
+        .reset-button i {
+            margin-right: 8px;
+        }
+        
+        .efficiency-section {
+            display: flex;
+            align-items: center;
+        }
+        
+        .efficiency-label {
+            font-weight: 600;
+            margin-right: 15px;
+            color: #888;
+        }
+        
+        .efficiency-value {
+            background-color: #0a2d1a;
+            color: #4aff7a;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            border: 1px solid #1a5d3a;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: #333;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 600px) {
+            .controller-container {
+                padding: 20px;
+            }
+            
+            .channel-selector, .toggle-section, .reset-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .set-button, .reset-button {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="controller-container">
+        <div class="header">
+            <h1>Channel Controller</h1>
+            <p>Control and monitor device channel</p>
+        </div>
+        
+        <div class="control-section">
+            <div class="section-title">Channel Control</div>
+            <div class="channel-selector">
+                <div class="channel-info">
+                    <span class="channel-label">CH</span>
+                    <div class="channel-number" id="current-channel">02</div>
+                </div>
+                <div class="controls">
+                    <button class="set-button" id="set-button">
+                        <i class="fas fa-cog"></i> SET
+                    </button>
+                </div>
+                <div class="value-display" id="set-value">5500</div>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="control-section">
+            <div class="section-title">Power Control</div>
+            <div class="toggle-section">
+                <div class="toggle-container">
+                    <span class="toggle-label">ON/OFF</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="power-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="count-section">
+                    <span class="count-label">COUNT</span>
+                    <div class="count-value" id="count-value">1234</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="control-section">
+            <div class="section-title">System Control</div>
+            <div class="reset-section">
+                <button class="reset-button" id="reset-button">
+                    <i class="fas fa-redo"></i> RESET
+                </button>
+                <div class="efficiency-section">
+                    <span class="efficiency-label">Efficiency</span>
+                    <div class="efficiency-value" id="efficiency-value">92%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set button functionality
+            const setButton = document.getElementById('set-button');
+            const setValue = document.getElementById('set-value');
+            
+            setButton.addEventListener('click', function() {
+                // In a real application, this would open a modal or send a command
+                alert(`Setting channel CH02 to value ${setValue.textContent}`);
+                
+                // For demo, change the value randomly
+                const currentVal = parseInt(setValue.textContent);
+                const newVal = currentVal + Math.floor(Math.random() * 100) - 50;
+                setValue.textContent = Math.max(1000, Math.min(9999, newVal));
+            });
+            
+            // Power toggle functionality
+            const powerToggle = document.getElementById('power-toggle');
+            const countValue = document.getElementById('count-value');
+            
+            powerToggle.addEventListener('change', function() {
+                const isOn = this.checked;
+                
+                if (isOn) {
+                    // Start counting up
+                    startCounter();
+                    alert('Power turned ON');
+                } else {
+                    // Stop counting
+                    alert('Power turned OFF');
+                }
+            });
+            
+            // Counter functionality
+            let counter = 1234;
+            let counterInterval;
+            
+            function startCounter() {
+                if (counterInterval) clearInterval(counterInterval);
+                
+                counterInterval = setInterval(() => {
+                    if (powerToggle.checked) {
+                        counter++;
+                        countValue.textContent = counter;
+                        
+                        // Update efficiency based on count (for demo)
+                        const efficiency = 90 + (counter % 10);
+                        document.getElementById('efficiency-value').textContent = efficiency + '%';
+                    } else {
+                        clearInterval(counterInterval);
+                    }
+                }, 1000);
+            }
+            
+            // Start counter initially since power is ON by default
+            startCounter();
+            
+            // Reset button functionality
+            const resetButton = document.getElementById('reset-button');
+            resetButton.addEventListener('click', function() {
+                // Reset count to 1234
+                counter = 1234;
+                countValue.textContent = counter;
+                
+                // Reset efficiency to 92%
+                document.getElementById('efficiency-value').textContent = '92%';
+                
+                // Reset SET value to 5500
+                setValue.textContent = '5500';
+                
+                // Turn power off
+                powerToggle.checked = false;
+                
+                alert('System has been reset to default values');
+            });
+        });
+    </script>
+</body>
+</html>
