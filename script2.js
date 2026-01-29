@@ -1,10 +1,12 @@
-const TOTAL_MACHINES = 16;
+const TOTAL_MACHINES = 20;
 let currentMachine = null;
-let totalCount = 801234;
-let efficiency = 89;
+let totalCount = 810234;
+let efficiency = 92;
 let channelModalMachine = null;
 let channelCounterInterval = null;
+let currentSetChannel = null;
 
+// Initialize 20 machines
 const machines = Array.from({length: TOTAL_MACHINES}, (_, i) => ({
     id: i + 1,
     name: `CH${String(i + 1).padStart(2,'0')}`,
@@ -14,7 +16,9 @@ const machines = Array.from({length: TOTAL_MACHINES}, (_, i) => ({
     count: Math.floor(Math.random() * 5000) + 1000,
     setValue: Math.floor(Math.random() * 9000) + 1000,
     modalIsOn: false,
-    modalCount: 0
+    modalCount: 0,
+    channelValue: Math.floor(Math.random() * 9000) + 1000,
+    currentCount: Math.floor(Math.random() * 9999)
 }));
 
 const grid = document.getElementById("machinesGrid");
@@ -54,11 +58,14 @@ function updateEfficiency() {
         );
         efficiency = avgEfficiency;
     } else {
-        efficiency = 89;
+        efficiency = 92;
     }
     
     document.getElementById("globalEfficiency").textContent = `${efficiency}%`;
-    document.querySelector('.meter-fill').style.width = `${efficiency}%`;
+    const meterFill = document.querySelector('.meter-fill');
+    if (meterFill) {
+        meterFill.style.width = `${efficiency}%`;
+    }
 }
 
 function updateTotalCount() {
@@ -74,11 +81,11 @@ function updateTotalCount() {
         formattedCount = totalCount;
     }
     
-    const countValue = document.querySelector('.count-value');
-    const countSub = document.querySelector('.count-sub');
+    const countValue = document.getElementById('globalCount');
+    const countSub = document.getElementById('globalCountSub');
     
-    countValue.textContent = formattedCount;
-    countSub.textContent = totalCount.toString();
+    if (countValue) countValue.textContent = formattedCount;
+    if (countSub) countSub.textContent = totalCount.toString();
 }
 
 function hexToDec(hexValue) {
@@ -102,6 +109,11 @@ function renderMachines(){
     machines.forEach(m => {
         const gaugeHeight = calculateGaugeHeight(m.value);
         const machineEfficiency = m.efficiency;
+        
+        // Update count if machine is on
+        if (m.isOn) {
+            m.currentCount += Math.floor(Math.random() * 10) + 1;
+        }
         
         const html = `
         <div class="machine-card ${m.isOn ? 'active' : ''}" data-id="${m.id}">
@@ -127,7 +139,24 @@ function renderMachines(){
                 <div class="gauge-container">
                     <div class="gauge-fill" style="width: ${gaugeHeight}%"></div>
                 </div>
-                <div class="efficiency-label">EFF: ${machineEfficiency}%</div>
+            </div>
+
+            <div class="machine-values-section">
+                <div class="values-row">
+                    <div class="value-item">
+                        <div class="value-item-label">SET VALUE</div>
+                        <div class="value-item-value">${m.setValue.toString().padStart(4, '0')}</div>
+                    </div>
+                    <div class="value-item">
+                        <div class="value-item-label">COUNT</div>
+                        <div class="value-item-value">${m.currentCount}</div>
+                    </div>
+                </div>
+                
+                <div class="efficiency-display">
+                    <div class="efficiency-label">EFFICIENCY</div>
+                    <div class="efficiency-value">${machineEfficiency}%</div>
+                </div>
             </div>
 
             <div class="machine-controls">
@@ -141,22 +170,27 @@ function renderMachines(){
 
     // Update global status
     const activeCount = machines.filter(m => m.isOn).length;
-    document.getElementById("globalStatus").innerHTML = 
-        `<span style="color:#00ff88">${activeCount} ACTIVE</span> | 
-         <span style="color:#ffaa00">${TOTAL_MACHINES - activeCount} IDLE</span> | 
-         <span style="color:#00ccff">TOTAL: ${TOTAL_MACHINES}</span>`;
+    const globalStatusElement = document.getElementById("globalStatus");
+    if (globalStatusElement) {
+        globalStatusElement.innerHTML = 
+            `<span style="color:#00ff88">${activeCount} ACTIVE</span> | 
+             <span style="color:#ffaa00">${TOTAL_MACHINES - activeCount} IDLE</span> | 
+             <span style="color:#00ccff">TOTAL: ${TOTAL_MACHINES}</span>`;
+    }
     
     // Update system status
     const systemStatus = document.getElementById("systemStatus");
-    if (activeCount === TOTAL_MACHINES) {
-        systemStatus.textContent = "FULL OPERATION";
-        systemStatus.style.color = "#00ff88";
-    } else if (activeCount > 0) {
-        systemStatus.textContent = "PARTIAL OPERATION";
-        systemStatus.style.color = "#ffaa00";
-    } else {
-        systemStatus.textContent = "STANDBY";
-        systemStatus.style.color = "#ff6666";
+    if (systemStatus) {
+        if (activeCount === TOTAL_MACHINES) {
+            systemStatus.textContent = "FULL OPERATION";
+            systemStatus.style.color = "#00ff88";
+        } else if (activeCount > 0) {
+            systemStatus.textContent = "PARTIAL OPERATION";
+            systemStatus.style.color = "#ffaa00";
+        } else {
+            systemStatus.textContent = "STANDBY";
+            systemStatus.style.color = "#ff6666";
+        }
     }
     
     // Update efficiency and count
@@ -170,23 +204,29 @@ function openChannelController(machine) {
     
     // Update modal with machine data
     document.getElementById("controllerTitle").textContent = `${machine.name} CONTROLLER`;
+    document.getElementById("controllerSubtitle").textContent = `Control and monitor ${machine.name} channel`;
     document.getElementById("controllerChannelLabel").textContent = machine.name;
     document.getElementById("controller-channel").textContent = machine.name.replace("CH", "");
-    document.getElementById("controller-set-value").textContent = machine.setValue;
-    document.getElementById("controller-count-value").textContent = machine.count;
+    document.getElementById("controller-set-value").textContent = machine.channelValue.toString().padStart(4, '0');
+    document.getElementById("controller-count-value").textContent = machine.currentCount;
     document.getElementById("controller-efficiency-value").textContent = `${machine.efficiency}%`;
     
-    // Set toggle state
-    const toggle = document.getElementById("controller-power-toggle");
-    toggle.checked = machine.modalIsOn || machine.isOn;
+    // Set power toggle state
+    const toggleSwitch = document.getElementById("controller-power-toggle");
+    if (machine.modalIsOn || machine.isOn) {
+        toggleSwitch.classList.add("active");
+    } else {
+        toggleSwitch.classList.remove("active");
+    }
     
     // Start counter if modal is on
-    if (toggle.checked) {
+    if (machine.modalIsOn || machine.isOn) {
         startModalCounter();
     }
     
     // Show modal
     document.getElementById("channelControllerModal").style.display = "flex";
+    document.body.style.overflow = 'hidden';
 }
 
 /* START COUNTER FOR MODAL */
@@ -194,21 +234,36 @@ function startModalCounter() {
     if (channelCounterInterval) clearInterval(channelCounterInterval);
     
     channelCounterInterval = setInterval(() => {
-        if (channelModalMachine && document.getElementById("controller-power-toggle").checked) {
-            channelModalMachine.modalCount = (channelModalMachine.modalCount || channelModalMachine.count) + 1;
-            channelModalMachine.count = channelModalMachine.modalCount;
+        if (channelModalMachine && (channelModalMachine.modalIsOn || channelModalMachine.isOn)) {
+            // Update count
+            channelModalMachine.currentCount += Math.floor(Math.random() * 5) + 1;
+            channelModalMachine.count = channelModalMachine.currentCount;
             
-            document.getElementById("controller-count-value").textContent = channelModalMachine.modalCount;
+            // Update modal display
+            const countElement = document.getElementById("controller-count-value");
+            if (countElement) {
+                countElement.textContent = channelModalMachine.currentCount;
+            }
             
             // Update efficiency based on count (for demo)
-            const efficiency = 90 + (channelModalMachine.modalCount % 10);
+            const efficiency = 90 + (channelModalMachine.currentCount % 10);
             channelModalMachine.efficiency = efficiency;
-            document.getElementById("controller-efficiency-value").textContent = efficiency + '%';
+            
+            const efficiencyElement = document.getElementById("controller-efficiency-value");
+            if (efficiencyElement) {
+                efficiencyElement.textContent = efficiency + '%';
+            }
             
             // Also update the machine card efficiency
-            const card = document.querySelector(`.machine-card[data-id="${channelModalMachine.id}"] .efficiency-label`);
+            const card = document.querySelector(`.machine-card[data-id="${channelModalMachine.id}"] .efficiency-value`);
             if (card) {
-                card.textContent = `EFF: ${efficiency}%`;
+                card.textContent = `${efficiency}%`;
+            }
+            
+            // Update count in the machine card
+            const countCard = document.querySelector(`.machine-card[data-id="${channelModalMachine.id}"] .value-item-value:last-child`);
+            if (countCard) {
+                countCard.textContent = channelModalMachine.currentCount;
             }
         }
     }, 1000);
@@ -223,40 +278,57 @@ function closeChannelController() {
     
     document.getElementById("channelControllerModal").style.display = "none";
     channelModalMachine = null;
+    document.body.style.overflow = 'auto';
     
     // Update main view
     renderMachines();
 }
 
+/* OPEN CHANNEL SET MODAL */
+function openChannelSetModal(channel) {
+    currentSetChannel = channel;
+    
+    document.getElementById("channelSetLabel").innerHTML = 
+        `<span style="color:#00ccff">${channel.name}</span> | CURRENT: <span style="color:#ffaa00">${channel.channelValue.toString().padStart(4, '0')}</span>`;
+    document.getElementById("channelSetInput").value = channel.channelValue;
+    document.getElementById("channelSetModal").style.display = "flex";
+    document.body.style.overflow = 'hidden';
+    document.getElementById("channelSetInput").focus();
+    document.getElementById("channelSetInput").select();
+}
+
 /* GLOBAL CONTROLS */
-document.getElementById("globalStart").onclick = () => {
+document.getElementById("globalStart").addEventListener('click', () => {
     machines.forEach(m => {
         m.isOn = true;
         m.modalIsOn = true;
         m.efficiency = 85 + Math.floor(Math.random() * 15);
     });
     renderMachines();
-};
+});
 
-document.getElementById("globalStop").onclick = () => {
+document.getElementById("globalStop").addEventListener('click', () => {
     machines.forEach(m => {
         m.isOn = false;
         m.modalIsOn = false;
     });
     renderMachines();
-};
+});
 
-document.getElementById("globalReset").onclick = () => {
+document.getElementById("globalReset").addEventListener('click', () => {
     machines.forEach(m => {
         m.value = "0000";
         m.efficiency = 85 + Math.floor(Math.random() * 15);
         m.count = Math.floor(Math.random() * 5000) + 1000;
+        m.currentCount = Math.floor(Math.random() * 9999);
         m.setValue = Math.floor(Math.random() * 9000) + 1000;
+        m.channelValue = Math.floor(Math.random() * 9000) + 1000;
         m.modalCount = 0;
     });
-    totalCount = 801234;
+    totalCount = 810234;
+    updateTotalCount();
     renderMachines();
-};
+});
 
 /* MACHINE ACTIONS */
 document.addEventListener("click", e => {
@@ -301,88 +373,115 @@ document.addEventListener("click", e => {
             `<span style="color:#00ccff">${m.name}</span> | CURRENT: <span style="color:#ffaa00">${formatValue(m.value)}</span>`;
         document.getElementById("modalInput").value = "";
         document.getElementById("settingsModal").style.display = "flex";
+        document.body.style.overflow = 'hidden';
         document.getElementById("modalInput").focus();
     }
 });
 
 /* CHANNEL CONTROLLER MODAL CONTROLS */
-document.getElementById("closeController").onclick = closeChannelController;
+document.getElementById("closeController").addEventListener('click', closeChannelController);
 
-document.getElementById("controller-set-button").onclick = () => {
+// Power toggle for modal
+document.getElementById("controller-power-toggle").addEventListener('click', () => {
     if (!channelModalMachine) return;
     
-    // In a real application, this would open a modal or send a command
-    const currentVal = parseInt(channelModalMachine.setValue);
-    const newVal = currentVal + Math.floor(Math.random() * 100) - 50;
-    channelModalMachine.setValue = Math.max(1000, Math.min(9999, newVal));
+    const toggleSwitch = document.getElementById("controller-power-toggle");
+    const isOn = toggleSwitch.classList.contains("active");
     
-    document.getElementById("controller-set-value").textContent = channelModalMachine.setValue;
-    
-    // Update the actual value in the machine (hex conversion)
-    const hexVal = Math.min(65535, Math.max(0, channelModalMachine.setValue)).toString(16).toUpperCase().padStart(4, '0');
-    channelModalMachine.value = hexVal;
-    
-    // Also update efficiency based on set value
-    const numericValue = parseInt(hexVal, 16);
-    channelModalMachine.efficiency = Math.min(99, Math.max(85, 85 + Math.floor((numericValue / 65535) * 15)));
-    document.getElementById("controller-efficiency-value").textContent = channelModalMachine.efficiency + '%';
-    
-    renderMachines();
-};
-
-document.getElementById("controller-power-toggle").addEventListener('change', function() {
-    if (!channelModalMachine) return;
-    
-    channelModalMachine.modalIsOn = this.checked;
-    channelModalMachine.isOn = this.checked;
-    
-    if (this.checked) {
-        // Start counting up
-        startModalCounter();
-    } else {
-        // Stop counting
+    if (isOn) {
+        // Turn OFF
+        toggleSwitch.classList.remove("active");
+        channelModalMachine.modalIsOn = false;
+        channelModalMachine.isOn = false;
+        
+        // Stop counter
         if (channelCounterInterval) {
             clearInterval(channelCounterInterval);
             channelCounterInterval = null;
         }
+    } else {
+        // Turn ON
+        toggleSwitch.classList.add("active");
+        channelModalMachine.modalIsOn = true;
+        channelModalMachine.isOn = true;
+        channelModalMachine.efficiency = 85 + Math.floor(Math.random() * 15);
+        
+        // Start counter
+        startModalCounter();
     }
     
     // Update main view
     renderMachines();
 });
 
-document.getElementById("controller-reset-button").onclick = () => {
+// SET button in channel controller
+document.getElementById("controller-set-button").addEventListener('click', () => {
     if (!channelModalMachine) return;
     
-    // Reset machine values
-    channelModalMachine.value = "0000";
-    channelModalMachine.setValue = Math.floor(Math.random() * 9000) + 1000;
-    channelModalMachine.count = Math.floor(Math.random() * 5000) + 1000;
-    channelModalMachine.modalCount = channelModalMachine.count;
-    channelModalMachine.efficiency = 85 + Math.floor(Math.random() * 15);
+    openChannelSetModal(channelModalMachine);
+});
+
+// RESET button in channel controller
+document.getElementById("controller-reset-button").addEventListener('click', () => {
+    if (!channelModalMachine) return;
     
-    // Turn power off
-    channelModalMachine.modalIsOn = false;
-    channelModalMachine.isOn = false;
+    // Reset channel value to 0
+    channelModalMachine.channelValue = 0;
+    channelModalMachine.currentCount = 0;
     
     // Update modal display
-    document.getElementById("controller-set-value").textContent = channelModalMachine.setValue;
-    document.getElementById("controller-count-value").textContent = channelModalMachine.count;
-    document.getElementById("controller-efficiency-value").textContent = `${channelModalMachine.efficiency}%`;
-    document.getElementById("controller-power-toggle").checked = false;
+    document.getElementById("controller-set-value").textContent = "0000";
+    document.getElementById("controller-count-value").textContent = "0";
     
-    // Stop counter
-    if (channelCounterInterval) {
-        clearInterval(channelCounterInterval);
-        channelCounterInterval = null;
-    }
+    // Also reset efficiency
+    channelModalMachine.efficiency = 85 + Math.floor(Math.random() * 15);
+    document.getElementById("controller-efficiency-value").textContent = `${channelModalMachine.efficiency}%`;
     
     // Update main view
     renderMachines();
-};
+});
+
+/* CHANNEL SET MODAL CONTROLS */
+document.getElementById("channelSetSave").addEventListener('click', () => {
+    if (!currentSetChannel) return;
+    
+    const v = document.getElementById("channelSetInput").value;
+    if(v === "" || isNaN(v)) {
+        alert("Please enter a valid number (0-9999)");
+        document.getElementById("channelSetInput").focus();
+        return;
+    }
+    
+    const numValue = parseInt(v);
+    if(numValue < 0 || numValue > 9999) {
+        alert("Please enter a number between 0 and 9999");
+        document.getElementById("channelSetInput").focus();
+        return;
+    }
+    
+    currentSetChannel.channelValue = numValue;
+    currentSetChannel.setValue = numValue;
+    
+    // Update channel controller display
+    document.getElementById("controller-set-value").textContent = numValue.toString().padStart(4, '0');
+    
+    // Close modal
+    document.getElementById("channelSetModal").style.display = "none";
+    currentSetChannel = null;
+    document.body.style.overflow = 'auto';
+    
+    // Update main view
+    renderMachines();
+});
+
+document.getElementById("channelSetCancel").addEventListener('click', () => {
+    document.getElementById("channelSetModal").style.display = "none";
+    currentSetChannel = null;
+    document.body.style.overflow = 'auto';
+});
 
 /* SETTINGS MODAL */
-document.getElementById("modalSave").onclick = () => {
+document.getElementById("modalSave").addEventListener('click', () => {
     const v = document.getElementById("modalInput").value.toUpperCase();
     if(/^[0-9A-F]{1,4}$/.test(v)){
         currentMachine.value = v.padStart(4, "0");
@@ -390,25 +489,33 @@ document.getElementById("modalSave").onclick = () => {
         currentMachine.efficiency = Math.min(99, Math.max(85, 85 + Math.floor((numericValue / 65535) * 15)));
         
         document.getElementById("settingsModal").style.display = "none";
+        document.body.style.overflow = 'auto';
         renderMachines();
     } else {
         alert("INVALID! Enter 1-4 HEX characters (0-9, A-F)");
         document.getElementById("modalInput").focus();
     }
-};
+});
 
-document.getElementById("modalCancel").onclick = () => {
+document.getElementById("modalCancel").addEventListener('click', () => {
     document.getElementById("settingsModal").style.display = "none";
-};
+    document.body.style.overflow = 'auto';
+});
 
 // Modal keyboard controls
 document.addEventListener('keydown', (e) => {
     if(e.key === 'Escape') {
         if (document.getElementById("settingsModal").style.display === 'flex') {
             document.getElementById("settingsModal").style.display = "none";
+            document.body.style.overflow = 'auto';
         }
         if (document.getElementById("channelControllerModal").style.display === 'flex') {
             closeChannelController();
+        }
+        if (document.getElementById("channelSetModal").style.display === 'flex') {
+            document.getElementById("channelSetModal").style.display = "none";
+            currentSetChannel = null;
+            document.body.style.overflow = 'auto';
         }
     }
 });
@@ -419,30 +526,60 @@ document.getElementById("modalInput").addEventListener('keypress', (e) => {
     }
 });
 
+document.getElementById("channelSetInput").addEventListener('keypress', (e) => {
+    if(e.key === 'Enter') {
+        document.getElementById("channelSetSave").click();
+    }
+});
+
 // Auto update values
 setInterval(() => {
     machines.forEach(m => {
         if(m.isOn) {
             m.efficiency = Math.min(99, Math.max(85, m.efficiency + (Math.random() * 4 - 2)));
+            m.currentCount += Math.floor(Math.random() * 5);
         }
     });
     renderMachines();
 }, 3000);
 
 /* INITIALIZATION */
-setInterval(updateDateTime, 1000);
-renderMachines();
-updateDateTime();
-
-// Initialize with some active machines
-setTimeout(() => {
+// Set initial values based on the image
+function initializeMachines() {
+    // Set machines ON/OFF based on image data
+    const machineStatus = {
+        'CH01': false, 'CH02': false,
+        'CH03': false, 'CH04': true,
+        'CH05': false, 'CH06': false,
+        'CH07': false, 'CH08': true,
+        'CH09': false, 'CH10': true,
+        'CH11': true, 'CH12': false,
+        'CH13': false, 'CH14': true,
+        'CH15': false, 'CH16': true,
+        'CH17': false, 'CH18': false,
+        'CH19': false, 'CH20': false
+    };
+    
     machines.forEach(m => {
-        if(Math.random() > 0.5) {
-            m.isOn = true;
-            m.modalIsOn = true;
+        m.isOn = machineStatus[m.name] || false;
+        m.modalIsOn = m.isOn;
+        if (m.isOn) {
             m.value = Math.floor(Math.random() * 65535).toString(16).toUpperCase().padStart(4, '0');
             m.efficiency = 85 + Math.floor(Math.random() * 15);
+            m.channelValue = Math.floor(Math.random() * 9000) + 1000;
+            m.setValue = Math.floor(Math.random() * 9000) + 1000;
+            m.currentCount = Math.floor(Math.random() * 9999);
         }
     });
-    renderMachines();
-}, 500);
+    
+    // Set initial efficiency and count
+    efficiency = 92;
+    totalCount = 810234;
+}
+
+// Initialize
+setInterval(updateDateTime, 1000);
+initializeMachines();
+renderMachines();
+updateDateTime();
+updateTotalCount();

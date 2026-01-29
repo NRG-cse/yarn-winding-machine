@@ -13,15 +13,11 @@
 
     <!-- HEADER -->
     <header class="dashboard-header">
-        <div class="brand-section">
-            <div class="brand-logo">CHOISE<span class="brand-plus">+</span></div>
-            <div class="serial-number">99999</div>
-        </div>
         <h1 class="dashboard-title">VFD CONTROL PANEL</h1>
         <div class="datetime" id="datetime"></div>
     </header>
 
-    <!-- MAIN - SINGLE PAGE WITH 16 MACHINES -->
+    <!-- MAIN - SINGLE PAGE WITH 16 MACHINES IN 4 ROWS OF 5 -->
     <div class="main-content">
         <div class="machines-grid" id="machinesGrid"></div>
     </div>
@@ -49,11 +45,6 @@
                 <button class="global-btn global-stop" id="globalStop">STOP ALL</button>
                 <button class="global-btn global-reset" id="globalReset">RESET ALL</button>
             </div>
-            
-            <div class="friends-counter">
-                <div class="friends-label">FRIENDS</div>
-                <div class="friends-value">89%</div>
-            </div>
         </div>
 
         <div class="footer-right">
@@ -70,7 +61,7 @@
     </div>
 </div>
 
-<!-- SETTINGS MODAL -->
+<!-- SET VALUE MODAL -->
 <div class="modal" id="settingsModal">
     <div class="modal-content">
         <h2>SET VALUE</h2>
@@ -89,7 +80,7 @@
         <div class="controller-container">
             <div class="header">
                 <h1 id="controllerTitle">Channel Controller</h1>
-                <p>Control and monitor device channel</p>
+                <p id="controllerSubtitle">Control and monitor device channel</p>
                 <button class="close-controller" id="closeController">&times;</button>
             </div>
             
@@ -98,14 +89,14 @@
                 <div class="channel-selector">
                     <div class="channel-info">
                         <span class="channel-label" id="controllerChannelLabel">CH</span>
-                        <div class="channel-number" id="controller-channel">02</div>
+                        <div class="channel-number" id="controller-channel">01</div>
                     </div>
                     <div class="controls">
                         <button class="set-button" id="controller-set-button">
                             <i class="fas fa-cog"></i> SET
                         </button>
                     </div>
-                    <div class="value-display" id="controller-set-value">5500</div>
+                    <div class="value-display" id="controller-set-value">0000</div>
                 </div>
             </div>
             
@@ -116,10 +107,9 @@
                 <div class="toggle-section">
                     <div class="toggle-container">
                         <span class="toggle-label">ON/OFF</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="controller-power-toggle">
-                            <span class="toggle-slider"></span>
-                        </label>
+                        <div class="power-toggle-switch" id="controller-power-toggle">
+                            <div class="power-toggle-slider"></div>
+                        </div>
                     </div>
                     <div class="count-section">
                         <span class="count-label">COUNT</span>
@@ -142,6 +132,19 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- CHANNEL SET VALUE MODAL -->
+<div class="modal" id="channelSetModal">
+    <div class="modal-content channel-set-modal">
+        <h2>SET CHANNEL VALUE</h2>
+        <p id="channelSetLabel"></p>
+        <input id="channelSetInput" type="number" min="0" max="9999" placeholder="0000">
+        <div class="modal-buttons">
+            <button id="channelSetSave">SAVE</button>
+            <button id="channelSetCancel">CANCEL</button>
         </div>
     </div>
 </div>

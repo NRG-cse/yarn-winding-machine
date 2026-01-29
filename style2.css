@@ -10,7 +10,7 @@ body{
     color:white;
     height:100vh;
     overflow:hidden;
-    min-width: 1400px;
+    min-width: 1600px;
 }
 
 .hmi-container{
@@ -40,38 +40,6 @@ body{
     height: 70px;
 }
 
-.brand-section{
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.brand-logo{
-    font-size: 2rem;
-    font-weight: 900;
-    background: linear-gradient(90deg, #00ccff, #ff6600);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    line-height: 1;
-    letter-spacing: 1px;
-}
-
-.brand-plus{
-    color: #ff6600;
-    margin-left: 2px;
-}
-
-.serial-number{
-    font-size: 1rem;
-    color: #00ccff;
-    font-weight: 700;
-    padding: 4px 10px;
-    background: rgba(0, 204, 255, 0.1);
-    border-radius: 5px;
-    border: 1px solid rgba(0, 204, 255, 0.3);
-}
-
 .dashboard-title{
     background: linear-gradient(90deg, #ffffff, #cccccc);
     -webkit-background-clip: text;
@@ -94,7 +62,7 @@ body{
     text-align: center;
 }
 
-/* MAIN CONTENT - 16 MACHINES IN 4x4 GRID */
+/* MAIN CONTENT - 20 MACHINES IN 4 ROWS OF 5 (5x4 = 20 total) */
 .main-content{
     flex: 1;
     overflow: hidden;
@@ -103,19 +71,19 @@ body{
 
 .machines-grid{
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(4, 1fr);
     gap: 12px;
     height: 100%;
     padding: 5px;
 }
 
-/* COMPACT MACHINE CARD - 16 CARDS PER PAGE */
+/* COMPACT MACHINE CARD - 20 CARDS PER PAGE (5x4) */
 .machine-card{
     position: relative;
     background: linear-gradient(145deg, #1a1a2a, #121220);
     border-radius: 12px;
-    padding: 10px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -209,11 +177,11 @@ body{
     background: rgba(255, 102, 102, 0.1);
 }
 
-/* COMPACT POWER SWITCH */
+/* COMPACT POWER SWITCH - AT THE TOP */
 .power-switch-container{
-    width: 60px;
-    height: 60px;
-    margin: 8px 0;
+    width: 70px;
+    height: 70px;
+    margin: 5px 0 10px 0;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -251,19 +219,96 @@ body{
 }
 
 .power-switch-icon{
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     filter: drop-shadow(0 0 4px currentColor);
 }
 
-/* COMPACT VALUE DISPLAY */
-.value-display-section{
+/* MACHINE VALUES SECTION - SET VALUE AND COUNT VALUE */
+.machine-values-section{
     width: 100%;
-    margin: 8px 0;
+    margin: 0;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     border: 1px solid rgba(255, 170, 0, 0.2);
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.values-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.value-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
     padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.value-item-label {
+    font-size: 0.7rem;
+    color: #00ccff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.value-item-value {
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+    line-height: 1;
+}
+
+/* EFFICIENCY DISPLAY */
+.efficiency-display {
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    padding: 6px;
+    border: 1px solid rgba(0, 200, 255, 0.2);
+}
+
+.efficiency-label{
+    font-size: 0.65rem;
+    color: #00ccff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+    font-weight: 600;
+}
+
+.efficiency-value{
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #00ff88;
+    text-align: center;
+}
+
+/* HEX VALUE DISPLAY (Original Value) */
+.value-display-section{
+    width: 100%;
+    margin: 10px 0;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 170, 0, 0.2);
+    padding: 10px;
     position: relative;
     overflow: hidden;
 }
@@ -275,6 +320,7 @@ body{
     letter-spacing: 1px;
     margin-bottom: 4px;
     font-weight: 600;
+    text-align: center;
 }
 
 .value-display{
@@ -285,6 +331,7 @@ body{
     letter-spacing: 2px;
     text-align: center;
     line-height: 1;
+    margin-bottom: 6px;
 }
 
 .gauge-container{
@@ -300,14 +347,7 @@ body{
     height: 100%;
     background: linear-gradient(90deg, #ffaa00, #ff6600);
     transition: width 0.5s ease;
-}
-
-.efficiency-label{
-    font-size: 0.6rem;
-    color: #00ccff;
-    text-align: center;
-    margin-top: 4px;
-    font-weight: 600;
+    border-radius: 3px;
 }
 
 /* COMPACT MACHINE CONTROLS */
@@ -315,12 +355,12 @@ body{
     display: flex;
     gap: 8px;
     width: 100%;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 .control-btn{
     flex: 1;
-    padding: 8px 4px;
+    padding: 10px 4px;
     font-weight: 700;
     cursor: pointer;
     border: none;
@@ -336,6 +376,7 @@ body{
 
 .control-btn:hover{
     transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .control-btn.set{
@@ -414,6 +455,7 @@ body{
     padding: 10px;
     border: 1px solid rgba(255, 170, 0, 0.3);
     text-align: center;
+    min-width: 150px;
 }
 
 .count-label{
@@ -426,7 +468,7 @@ body{
 }
 
 .count-value{
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     font-weight: 900;
     color: #ffaa00;
     line-height: 1;
@@ -471,6 +513,7 @@ body{
 
 .global-btn:hover{
     transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 .global-start{
@@ -483,29 +526,6 @@ body{
 
 .global-reset{
     background: linear-gradient(145deg, #4444cc, #3333aa);
-}
-
-.friends-counter{
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    padding: 8px 20px;
-    border: 1px solid rgba(255, 100, 0, 0.3);
-    text-align: center;
-}
-
-.friends-label{
-    font-size: 0.8rem;
-    color: #ff6600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 3px;
-    font-weight: 600;
-}
-
-.friends-value{
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: #ff6600;
 }
 
 .footer-right{
@@ -597,13 +617,17 @@ body{
     width: 200px;
     font-size: 1.5rem;
     text-align: center;
-    letter-spacing: 8px;
+    letter-spacing: 4px;
     background: rgba(0, 0, 0, 0.6);
     border: 2px solid #00ccff;
     border-radius: 8px;
     color: #ffaa00;
     outline: none;
     font-family: 'Courier New', monospace;
+}
+
+.channel-set-modal input {
+    letter-spacing: normal;
 }
 
 .modal-buttons{
@@ -623,22 +647,22 @@ body{
     transition: all 0.3s ease;
 }
 
-#modalSave{
+#modalSave, #channelSetSave {
     background: linear-gradient(145deg, #00ccff, #0088cc);
     color: white;
 }
 
-#modalSave:hover{
+#modalSave:hover, #channelSetSave:hover {
     background: linear-gradient(145deg, #00eeff, #00aaff);
     transform: translateY(-2px);
 }
 
-#modalCancel{
+#modalCancel, #channelSetCancel {
     background: linear-gradient(145deg, #666666, #444444);
     color: white;
 }
 
-#modalCancel:hover{
+#modalCancel:hover, #channelSetCancel:hover {
     background: linear-gradient(145deg, #888888, #666666);
     transform: translateY(-2px);
 }
@@ -806,47 +830,33 @@ body{
     color: #e0e0e0;
 }
 
-.toggle-switch {
+/* POWER TOGGLE SWITCH - FIXED CSS VERSION */
+.power-toggle-switch {
     position: relative;
     width: 60px;
     height: 30px;
-}
-
-.toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.toggle-slider {
-    position: absolute;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     background-color: #444;
     border-radius: 34px;
-    transition: .4s;
+    transition: background-color 0.4s;
 }
 
-.toggle-slider:before {
+.power-toggle-switch.active {
+    background-color: #2a5caa;
+}
+
+.power-toggle-slider {
     position: absolute;
-    content: "";
     height: 22px;
     width: 22px;
     left: 4px;
     bottom: 4px;
     background-color: white;
     border-radius: 50%;
-    transition: .4s;
+    transition: transform 0.4s;
 }
 
-.toggle-switch input:checked + .toggle-slider {
-    background-color: #2a5caa;
-}
-
-.toggle-switch input:checked + .toggle-slider:before {
+.power-toggle-switch.active .power-toggle-slider {
     transform: translateX(30px);
 }
 
