@@ -81,8 +81,8 @@ function updateTotalCount() {
         formattedCount = totalCount;
     }
     
-    const countValue = document.getElementById('globalCount');
-    const countSub = document.getElementById('globalCountSub');
+    const countValue = document.querySelector('.count-value');
+    const countSub = document.querySelector('.count-sub');
     
     if (countValue) countValue.textContent = formattedCount;
     if (countSub) countSub.textContent = totalCount.toString();
