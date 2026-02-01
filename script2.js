@@ -107,7 +107,6 @@ function renderMachines(){
     grid.innerHTML = "";
 
     machines.forEach(m => {
-        const gaugeHeight = calculateGaugeHeight(m.value);
         const machineEfficiency = m.efficiency;
         
         // Update count if machine is on
@@ -127,17 +126,9 @@ function renderMachines(){
                 </div>
             </div>
 
-            <div class="power-switch-container" data-id="${m.id}" data-action="open-controller">
+            <div class="power-switch-container" data-id="${m.id}" data-action="toggle">
                 <div class="power-switch ${m.isOn ? 'active' : ''}">
                     ${m.isOn ? powerOnSVG : powerOffSVG}
-                </div>
-            </div>
-
-            <div class="value-display-section">
-                <div class="value-label">VALUE</div>
-                <div class="value-display">${formatValue(m.value)}</div>
-                <div class="gauge-container">
-                    <div class="gauge-fill" style="width: ${gaugeHeight}%"></div>
                 </div>
             </div>
 
@@ -278,10 +269,7 @@ function closeChannelController() {
     
     document.getElementById("channelControllerModal").style.display = "none";
     channelModalMachine = null;
-    document.body.style.overflow = 'auto';
-    
-    // Update main view
-    renderMachines();
+    document.body.style.overflow = 'hidden'; // Keep hidden for no scroll
 }
 
 /* OPEN CHANNEL SET MODAL */
@@ -337,11 +325,6 @@ document.addEventListener("click", e => {
     
     const {id, action} = element.dataset;
     const m = machines.find(x => x.id == id);
-
-    if(action === "open-controller"){
-        openChannelController(m);
-        return;
-    }
 
     if(action === "toggle"){
         const switchElement = element.querySelector('.power-switch');
@@ -468,7 +451,7 @@ document.getElementById("channelSetSave").addEventListener('click', () => {
     // Close modal
     document.getElementById("channelSetModal").style.display = "none";
     currentSetChannel = null;
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = 'hidden';
     
     // Update main view
     renderMachines();
@@ -477,7 +460,7 @@ document.getElementById("channelSetSave").addEventListener('click', () => {
 document.getElementById("channelSetCancel").addEventListener('click', () => {
     document.getElementById("channelSetModal").style.display = "none";
     currentSetChannel = null;
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = 'hidden';
 });
 
 /* SETTINGS MODAL */
@@ -489,7 +472,7 @@ document.getElementById("modalSave").addEventListener('click', () => {
         currentMachine.efficiency = Math.min(99, Math.max(85, 85 + Math.floor((numericValue / 65535) * 15)));
         
         document.getElementById("settingsModal").style.display = "none";
-        document.body.style.overflow = 'auto';
+        document.body.style.overflow = 'hidden';
         renderMachines();
     } else {
         alert("INVALID! Enter 1-4 HEX characters (0-9, A-F)");
@@ -499,7 +482,7 @@ document.getElementById("modalSave").addEventListener('click', () => {
 
 document.getElementById("modalCancel").addEventListener('click', () => {
     document.getElementById("settingsModal").style.display = "none";
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = 'hidden';
 });
 
 // Modal keyboard controls
@@ -507,7 +490,7 @@ document.addEventListener('keydown', (e) => {
     if(e.key === 'Escape') {
         if (document.getElementById("settingsModal").style.display === 'flex') {
             document.getElementById("settingsModal").style.display = "none";
-            document.body.style.overflow = 'auto';
+            document.body.style.overflow = 'hidden';
         }
         if (document.getElementById("channelControllerModal").style.display === 'flex') {
             closeChannelController();
@@ -515,7 +498,7 @@ document.addEventListener('keydown', (e) => {
         if (document.getElementById("channelSetModal").style.display === 'flex') {
             document.getElementById("channelSetModal").style.display = "none";
             currentSetChannel = null;
-            document.body.style.overflow = 'auto';
+            document.body.style.overflow = 'hidden';
         }
     }
 });
@@ -583,3 +566,13 @@ initializeMachines();
 renderMachines();
 updateDateTime();
 updateTotalCount();
+
+// Prevent any touch scrolling
+document.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+}, { passive: false });
+
+// Prevent mouse wheel scrolling
+document.addEventListener('wheel', function(e) {
+    e.preventDefault();
+}, { passive: false });

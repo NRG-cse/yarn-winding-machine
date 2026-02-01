@@ -9,18 +9,21 @@ body{
     background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
     color:white;
     height:100vh;
+    width:100vw;
     overflow:hidden;
-    min-width: 1600px;
+    position:fixed;
 }
 
 .hmi-container{
     height:100vh;
+    width:100vw;
     display:flex;
     flex-direction:column;
     padding:10px;
     background: 
         radial-gradient(circle at 10% 20%, rgba(0, 200, 255, 0.05) 0%, transparent 50%),
         radial-gradient(circle at 90% 80%, rgba(255, 100, 0, 0.05) 0%, transparent 50%);
+    overflow:hidden;
 }
 
 /* HEADER - COMPACT */
@@ -39,6 +42,7 @@ body{
     margin-bottom: 15px;
     height: 70px;
     flex-shrink: 0;
+    min-height: 70px;
 }
 
 .dashboard-title{
@@ -63,12 +67,13 @@ body{
     text-align: center;
 }
 
-/* MAIN CONTENT - 20 MACHINES IN 4 ROWS OF 5 (5x4 = 20 total) */
+/* MAIN CONTENT - NO SCROLL, 20 MACHINES IN 4 ROWS OF 5 */
 .main-content{
     flex: 1;
     overflow: hidden;
     padding: 5px;
-    min-height: 0; /* Important for Firefox */
+    min-height: 0;
+    height: calc(100vh - 70px - 90px - 50px - 45px); /* Full height minus header, footer, status bar, and margins */
 }
 
 .machines-grid{
@@ -77,8 +82,9 @@ body{
     grid-template-rows: repeat(4, 1fr);
     gap: 12px;
     height: 100%;
+    width: 100%;
     padding: 5px;
-    min-height: 0; /* Important for grid items overflow */
+    min-height: 0;
 }
 
 /* COMPACT MACHINE CARD - 20 CARDS PER PAGE (5x4) */
@@ -96,8 +102,8 @@ body{
         inset 0 1px 0 rgba(255, 255, 255, 0.05);
     transition: all 0.3s ease;
     overflow: hidden;
-    min-height: 0; /* Important for grid items */
-    height: 100%; /* Fill grid cell */
+    min-height: 0;
+    height: 100%;
 }
 
 .machine-card.active{
@@ -115,7 +121,7 @@ body{
     cursor: pointer;
 }
 
-/* COMPACT MACHINE HEADER */
+/* MACHINE HEADER - CH LEFT, STATUS RIGHT */
 .machine-header{
     width: 100%;
     display: flex;
@@ -182,7 +188,7 @@ body{
     background: rgba(255, 102, 102, 0.1);
 }
 
-/* COMPACT POWER SWITCH - AT THE TOP */
+/* POWER SWITCH - BETWEEN HEADER AND VALUES */
 .power-switch-container{
     width: 50px;
     height: 50px;
@@ -229,7 +235,7 @@ body{
     filter: drop-shadow(0 0 4px currentColor);
 }
 
-/* MACHINE VALUES SECTION - SET VALUE AND COUNT VALUE */
+/* SET VALUE AND COUNT SECTION */
 .machine-values-section{
     width: 100%;
     margin: 0;
@@ -306,55 +312,6 @@ body{
     text-align: center;
 }
 
-/* HEX VALUE DISPLAY (Original Value) */
-.value-display-section{
-    width: 100%;
-    margin: 8px 0;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 170, 0, 0.2);
-    padding: 8px;
-    position: relative;
-    overflow: hidden;
-}
-
-.value-label{
-    font-size: 0.65rem;
-    color: #ffaa00;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-    font-weight: 600;
-    text-align: center;
-}
-
-.value-display{
-    font-family: 'Courier New', 'Consolas', monospace;
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: #ffaa00;
-    letter-spacing: 2px;
-    text-align: center;
-    line-height: 1;
-    margin-bottom: 4px;
-}
-
-.gauge-container{
-    margin-top: 4px;
-    height: 6px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 3px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 170, 0, 0.1);
-}
-
-.gauge-fill{
-    height: 100%;
-    background: linear-gradient(90deg, #ffaa00, #ff6600);
-    transition: width 0.5s ease;
-    border-radius: 3px;
-}
-
 /* COMPACT MACHINE CONTROLS */
 .machine-controls{
     display: flex;
@@ -406,6 +363,7 @@ body{
     margin-top: 12px;
     height: 90px;
     flex-shrink: 0;
+    min-height: 90px;
 }
 
 .footer-left{
@@ -577,6 +535,7 @@ body{
     text-align: center;
     font-weight: 600;
     flex-shrink: 0;
+    min-height: 40px;
 }
 
 /* MODAL */
@@ -837,7 +796,7 @@ body{
     color: #e0e0e0;
 }
 
-/* POWER TOGGLE SWITCH - FIXED CSS VERSION */
+/* POWER TOGGLE SWITCH */
 .power-toggle-switch {
     position: relative;
     width: 60px;
@@ -954,19 +913,203 @@ body{
     margin: 20px 0;
 }
 
-/* Responsive adjustments for modal */
-@media (max-width: 600px) {
-    .controller-container {
-        padding: 20px;
+/* NO RESPONSIVE - FIXED 5x4 LAYOUT FOR ALL SCREENS */
+@media (max-width: 1600px) {
+    .machines-grid {
+        gap: 10px;
+        padding: 3px;
     }
     
-    .channel-selector, .toggle-section, .reset-section {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
+    .machine-card {
+        padding: 10px;
     }
     
-    .set-button, .reset-button {
-        align-self: flex-end;
+    .machine-id {
+        font-size: 1.1rem;
+    }
+    
+    .value-item-value {
+        font-size: 1rem;
+    }
+    
+    .efficiency-value {
+        font-size: 0.9rem;
+    }
+    
+    .dashboard-title {
+        font-size: 1.6rem;
+    }
+    
+    .datetime {
+        font-size: 0.9rem;
+        min-width: 220px;
+    }
+}
+
+@media (max-width: 1400px) {
+    .machines-grid {
+        gap: 8px;
+    }
+    
+    .machine-card {
+        padding: 8px;
+    }
+    
+    .machine-id {
+        font-size: 1rem;
+    }
+    
+    .value-item-label,
+    .efficiency-label {
+        font-size: 0.6rem;
+    }
+    
+    .value-item-value {
+        font-size: 0.9rem;
+    }
+    
+    .efficiency-value {
+        font-size: 0.85rem;
+    }
+    
+    .control-btn {
+        font-size: 0.7rem;
+        padding: 6px 3px;
+    }
+    
+    .dashboard-title {
+        font-size: 1.4rem;
+    }
+    
+    .datetime {
+        font-size: 0.85rem;
+        min-width: 200px;
+        padding: 6px 12px;
+    }
+}
+
+/* EXTREME SMALL SCREENS - FORCE 5x4 WITH SMALLER CARDS */
+@media (max-width: 1200px) {
+    .hmi-container {
+        padding: 5px;
+    }
+    
+    .dashboard-header {
+        padding: 8px 15px;
+        height: 60px;
+        margin-bottom: 10px;
+    }
+    
+    .dashboard-title {
+        font-size: 1.2rem;
+    }
+    
+    .datetime {
+        font-size: 0.8rem;
+        min-width: 180px;
+        padding: 5px 10px;
+    }
+    
+    .machines-grid {
+        gap: 6px;
+        padding: 2px;
+    }
+    
+    .machine-card {
+        padding: 6px;
+    }
+    
+    .machine-id {
+        font-size: 0.9rem;
+    }
+    
+    .machine-status {
+        font-size: 0.6rem;
+        padding: 2px 6px;
+        min-width: 40px;
+    }
+    
+    .power-switch-container {
+        width: 40px;
+        height: 40px;
+        margin: 3px 0 5px 0;
+    }
+    
+    .power-switch-icon {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .machine-values-section {
+        padding: 6px;
+    }
+    
+    .value-item {
+        padding: 4px;
+    }
+    
+    .value-item-label {
+        font-size: 0.55rem;
+        margin-bottom: 2px;
+    }
+    
+    .value-item-value {
+        font-size: 0.8rem;
+    }
+    
+    .efficiency-display {
+        padding: 4px;
+    }
+    
+    .efficiency-label {
+        font-size: 0.55rem;
+        margin-bottom: 2px;
+    }
+    
+    .efficiency-value {
+        font-size: 0.8rem;
+    }
+    
+    .machine-controls {
+        margin-top: 6px;
+        gap: 4px;
+    }
+    
+    .control-btn {
+        font-size: 0.65rem;
+        padding: 5px 2px;
+    }
+    
+    .footer-container {
+        padding: 8px 15px;
+        height: 70px;
+        margin-top: 8px;
+    }
+    
+    .meter-label,
+    .count-label,
+    .info-label {
+        font-size: 0.65rem;
+    }
+    
+    .meter-value,
+    .count-value {
+        font-size: 1.3rem;
+    }
+    
+    .info-value {
+        font-size: 1.1rem;
+    }
+    
+    .global-btn {
+        min-width: 80px;
+        padding: 8px 12px;
+        font-size: 0.75rem;
+    }
+    
+    .status-bar {
+        padding: 6px 15px;
+        font-size: 0.75rem;
+        margin-top: 6px;
     }
 }

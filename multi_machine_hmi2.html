@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>CHOISE+ | VFD HMI PANEL</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="style2.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Prevent scrolling */
+        /* Prevent all scrolling */
         html, body {
-            overflow: hidden;
+            overflow: hidden !important;
+            width: 100%;
             height: 100%;
+            position: fixed;
         }
     </style>
 </head>
@@ -24,7 +26,7 @@
         <div class="datetime" id="datetime"></div>
     </header>
 
-    <!-- MAIN - SINGLE PAGE WITH 16 MACHINES IN 4 ROWS OF 5 -->
+    <!-- MAIN CONTENT -->
     <div class="main-content">
         <div class="machines-grid" id="machinesGrid"></div>
     </div>
@@ -62,7 +64,7 @@
         </div>
     </div>
 
-    <!-- STATUS -->
+    <!-- STATUS BAR -->
     <div class="status-bar">
         <div class="status-text" id="globalStatus"></div>
     </div>
