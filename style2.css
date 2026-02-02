@@ -26,7 +26,7 @@ body{
     overflow:hidden;
 }
 
-/* HEADER - COMPACT */
+/* HEADER */
 .dashboard-header{
     display: flex;
     justify-content: space-between;
@@ -67,13 +67,13 @@ body{
     text-align: center;
 }
 
-/* MAIN CONTENT - NO SCROLL, 20 MACHINES IN 4 ROWS OF 5 */
+/* MAIN CONTENT */
 .main-content{
     flex: 1;
     overflow: hidden;
     padding: 5px;
     min-height: 0;
-    height: calc(100vh - 70px - 90px - 50px - 45px); /* Full height minus header, footer, status bar, and margins */
+    height: calc(100vh - 70px - 90px - 50px - 45px);
 }
 
 .machines-grid{
@@ -87,7 +87,7 @@ body{
     min-height: 0;
 }
 
-/* COMPACT MACHINE CARD - 20 CARDS PER PAGE (5x4) */
+/* MACHINE CARD */
 .machine-card{
     position: relative;
     background: linear-gradient(145deg, #1a1a2a, #121220);
@@ -104,6 +104,7 @@ body{
     overflow: hidden;
     min-height: 0;
     height: 100%;
+    cursor: pointer;
 }
 
 .machine-card.active{
@@ -118,16 +119,15 @@ body{
     box-shadow: 
         0 10px 25px rgba(0, 200, 255, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    cursor: pointer;
 }
 
-/* MACHINE HEADER - CH LEFT, STATUS RIGHT */
+/* MACHINE HEADER */
 .machine-header{
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 }
 
 .machine-id{
@@ -188,11 +188,11 @@ body{
     background: rgba(255, 102, 102, 0.1);
 }
 
-/* POWER SWITCH - BETWEEN HEADER AND VALUES */
+/* POWER SWITCH - মার্জিন কমানো হয়েছে */
 .power-switch-container{
-    width: 50px;
-    height: 50px;
-    margin: 5px 0 8px 0;
+    width: 60px;
+    height: 60px;
+    margin: 10px 0 15px 0; /* এখানে মার্জিন কমানো হয়েছে: 20px থেকে 15px */
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -230,128 +230,80 @@ body{
 }
 
 .power-switch-icon{
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     filter: drop-shadow(0 0 4px currentColor);
 }
 
-/* SET VALUE AND COUNT SECTION */
-.machine-values-section{
+/* VALUES DISPLAY - পাওয়ার সুইচের নিচে দেখানো হচ্ছে */
+.machine-values-display{
     width: 100%;
-    margin: 0;
+    margin-top: auto;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     border: 1px solid rgba(255, 170, 0, 0.2);
-    padding: 8px;
-    position: relative;
-    overflow: hidden;
-}
-
-.values-row {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 6px;
-}
-
-.value-item {
-    flex: 1;
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 6px;
-    padding: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 8px;
 }
 
-.value-item-label {
+.values-display-row{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.value-display-item{
+    flex: 1;
+    text-align: center;
+}
+
+.value-display-label{
     font-size: 0.65rem;
     color: #00ccff;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 4px;
     font-weight: 600;
-    text-align: center;
 }
 
-.value-item-value {
+.value-display-data{
     font-family: 'Courier New', 'Consolas', monospace;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 700;
     color: #ffffff;
-    text-align: center;
-    line-height: 1;
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* EFFICIENCY DISPLAY */
-.efficiency-display {
-    width: 100%;
+.efficiency-display-bottom{
     text-align: center;
+    padding: 8px;
     background: rgba(0, 0, 0, 0.2);
     border-radius: 6px;
-    padding: 5px;
     border: 1px solid rgba(0, 200, 255, 0.2);
 }
 
-.efficiency-label{
-    font-size: 0.6rem;
+.efficiency-label-bottom{
+    font-size: 0.65rem;
     color: #00ccff;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     font-weight: 600;
 }
 
-.efficiency-value{
+.efficiency-value-bottom{
     font-family: 'Courier New', 'Consolas', monospace;
     font-size: 1rem;
     font-weight: 700;
     color: #00ff88;
-    text-align: center;
 }
 
-/* COMPACT MACHINE CONTROLS */
-.machine-controls{
-    display: flex;
-    gap: 6px;
-    width: 100%;
-    margin-top: 8px;
-}
-
-.control-btn{
-    flex: 1;
-    padding: 8px 4px;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.2s ease;
-    background: linear-gradient(145deg, #2a2a4a, #1a1a3a);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-}
-
-.control-btn:hover{
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.control-btn.set{
-    background: linear-gradient(145deg, #ff6600, #cc5500);
-    color: white;
-}
-
-.control-btn.reset{
-    background: linear-gradient(145deg, #cc0000, #990000);
-    color: white;
-}
-
-/* COMPACT FOOTER */
+/* FOOTER */
 .footer-container{
     display: flex;
     justify-content: space-between;
@@ -565,35 +517,130 @@ body{
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     font-size: 1.8rem;
     font-weight: 800;
 }
 
-.modal-content p{
-    color: #ffaa00;
-    font-size: 1.2rem;
+.modal-channel-info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding: 10px 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 200, 255, 0.3);
+}
+
+.modal-channel-info span:first-child{
+    font-size: 1.5rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, #00ccff, #ff6600);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.modal-control-section{
     margin-bottom: 20px;
+}
+
+.modal-control-label{
+    color: #ffaa00;
+    font-size: 0.9rem;
     font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .modal-content input{
-    margin: 15px 0;
+    margin: 10px 0 15px 0;
     padding: 15px;
-    width: 200px;
+    width: 100%;
     font-size: 1.5rem;
     text-align: center;
-    letter-spacing: 4px;
     background: rgba(0, 0, 0, 0.6);
     border: 2px solid #00ccff;
     border-radius: 8px;
     color: #ffaa00;
     outline: none;
     font-family: 'Courier New', monospace;
+    font-weight: 700;
 }
 
-.channel-set-modal input {
-    letter-spacing: normal;
+.modal-control-buttons{
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.modal-btn{
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.modal-btn-set{
+    background: linear-gradient(145deg, #00ccff, #0088cc);
+    color: white;
+}
+
+.modal-btn-set:hover{
+    background: linear-gradient(145deg, #00eeff, #00aaff);
+    transform: translateY(-2px);
+}
+
+.modal-btn-reset{
+    background: linear-gradient(145deg, #cc0000, #990000);
+    color: white;
+}
+
+.modal-btn-reset:hover{
+    background: linear-gradient(145deg, #ee0000, #bb0000);
+    transform: translateY(-2px);
+}
+
+.modal-display-section{
+    display: flex;
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.modal-display-item{
+    flex: 1;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 200, 255, 0.2);
+}
+
+.modal-display-label{
+    color: #00ccff;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.modal-display-value{
+    font-family: 'Courier New', monospace;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #ffffff;
+}
+
+.modal-display-value.efficiency{
+    color: #00ff88;
 }
 
 .modal-buttons{
@@ -613,503 +660,22 @@ body{
     transition: all 0.3s ease;
 }
 
-#modalSave, #channelSetSave {
+#modalSave, #modalClose {
     background: linear-gradient(145deg, #00ccff, #0088cc);
     color: white;
 }
 
-#modalSave:hover, #channelSetSave:hover {
+#modalSave:hover, #modalClose:hover {
     background: linear-gradient(145deg, #00eeff, #00aaff);
     transform: translateY(-2px);
 }
 
-#modalCancel, #channelSetCancel {
+#modalCancel {
     background: linear-gradient(145deg, #666666, #444444);
     color: white;
 }
 
-#modalCancel:hover, #channelSetCancel:hover {
+#modalCancel:hover {
     background: linear-gradient(145deg, #888888, #666666);
     transform: translateY(-2px);
-}
-
-/* CHANNEL CONTROLLER MODAL */
-.channel-controller-modal {
-    width: 90%;
-    max-width: 500px;
-}
-
-.controller-container {
-    background-color: #1e1e1e;
-    border-radius: 12px;
-    padding: 30px;
-    width: 100%;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-    border: 2px solid #00ccff;
-    position: relative;
-}
-
-.controller-container .header {
-    text-align: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #333;
-    position: relative;
-}
-
-.controller-container .header h1 {
-    color: #4a9eff;
-    font-size: 1.8rem;
-    letter-spacing: 1px;
-}
-
-.controller-container .header p {
-    color: #aaa;
-    font-size: 0.9rem;
-    margin-top: 5px;
-}
-
-.close-controller {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: none;
-    border: none;
-    color: #ff6666;
-    font-size: 2rem;
-    cursor: pointer;
-    line-height: 1;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.close-controller:hover {
-    color: #ff4444;
-    transform: scale(1.1);
-}
-
-.control-section {
-    margin-bottom: 25px;
-}
-
-.section-title {
-    color: #888;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-    padding-left: 5px;
-}
-
-.channel-selector {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #252525;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 5px;
-    border: 1px solid #333;
-}
-
-.channel-info {
-    display: flex;
-    align-items: center;
-}
-
-.channel-label {
-    font-weight: 600;
-    font-size: 1.2rem;
-    margin-right: 15px;
-    color: #e0e0e0;
-}
-
-.channel-number {
-    background-color: #2d2d2d;
-    padding: 5px 12px;
-    border-radius: 4px;
-    font-weight: 600;
-    color: #4a9eff;
-    border: 1px solid #3a3a3a;
-}
-
-.set-button {
-    background-color: #2a5caa;
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-}
-
-.set-button:hover {
-    background-color: #3a6cba;
-    transform: translateY(-2px);
-}
-
-.set-button i {
-    margin-right: 8px;
-}
-
-.value-display {
-    background-color: #0a1a2d;
-    color: #4a9eff;
-    padding: 8px 15px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-    border: 1px solid #1a3a5d;
-    min-width: 80px;
-    text-align: center;
-    font-family: 'Courier New', monospace;
-}
-
-.toggle-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #252525;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 5px;
-    border: 1px solid #333;
-}
-
-.toggle-container {
-    display: flex;
-    align-items: center;
-}
-
-.toggle-label {
-    font-weight: 600;
-    font-size: 1.2rem;
-    margin-right: 15px;
-    color: #e0e0e0;
-}
-
-/* POWER TOGGLE SWITCH */
-.power-toggle-switch {
-    position: relative;
-    width: 60px;
-    height: 30px;
-    cursor: pointer;
-    background-color: #444;
-    border-radius: 34px;
-    transition: background-color 0.4s;
-}
-
-.power-toggle-switch.active {
-    background-color: #2a5caa;
-}
-
-.power-toggle-slider {
-    position: absolute;
-    height: 22px;
-    width: 22px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    border-radius: 50%;
-    transition: transform 0.4s;
-}
-
-.power-toggle-switch.active .power-toggle-slider {
-    transform: translateX(30px);
-}
-
-.count-section {
-    display: flex;
-    align-items: center;
-}
-
-.count-label {
-    font-weight: 600;
-    margin-right: 15px;
-    color: #888;
-}
-
-.count-value {
-    background-color: #0a1a2d;
-    color: #4a9eff;
-    padding: 8px 15px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-    border: 1px solid #1a3a5d;
-    min-width: 80px;
-    text-align: center;
-    font-family: 'Courier New', monospace;
-}
-
-.reset-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #252525;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #333;
-}
-
-.reset-button {
-    background-color: #aa2a2a;
-    color: white;
-    border: none;
-    padding: 10px 25px;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-}
-
-.reset-button:hover {
-    background-color: #ba3a3a;
-    transform: translateY(-2px);
-}
-
-.reset-button i {
-    margin-right: 8px;
-}
-
-.efficiency-section {
-    display: flex;
-    align-items: center;
-}
-
-.efficiency-label {
-    font-weight: 600;
-    margin-right: 15px;
-    color: #888;
-}
-
-.efficiency-value {
-    background-color: #0a2d1a;
-    color: #4aff7a;
-    padding: 8px 15px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-    border: 1px solid #1a5d3a;
-    min-width: 80px;
-    text-align: center;
-}
-
-.divider {
-    height: 1px;
-    background-color: #333;
-    margin: 20px 0;
-}
-
-/* NO RESPONSIVE - FIXED 5x4 LAYOUT FOR ALL SCREENS */
-@media (max-width: 1600px) {
-    .machines-grid {
-        gap: 10px;
-        padding: 3px;
-    }
-    
-    .machine-card {
-        padding: 10px;
-    }
-    
-    .machine-id {
-        font-size: 1.1rem;
-    }
-    
-    .value-item-value {
-        font-size: 1rem;
-    }
-    
-    .efficiency-value {
-        font-size: 0.9rem;
-    }
-    
-    .dashboard-title {
-        font-size: 1.6rem;
-    }
-    
-    .datetime {
-        font-size: 0.9rem;
-        min-width: 220px;
-    }
-}
-
-@media (max-width: 1400px) {
-    .machines-grid {
-        gap: 8px;
-    }
-    
-    .machine-card {
-        padding: 8px;
-    }
-    
-    .machine-id {
-        font-size: 1rem;
-    }
-    
-    .value-item-label,
-    .efficiency-label {
-        font-size: 0.6rem;
-    }
-    
-    .value-item-value {
-        font-size: 0.9rem;
-    }
-    
-    .efficiency-value {
-        font-size: 0.85rem;
-    }
-    
-    .control-btn {
-        font-size: 0.7rem;
-        padding: 6px 3px;
-    }
-    
-    .dashboard-title {
-        font-size: 1.4rem;
-    }
-    
-    .datetime {
-        font-size: 0.85rem;
-        min-width: 200px;
-        padding: 6px 12px;
-    }
-}
-
-/* EXTREME SMALL SCREENS - FORCE 5x4 WITH SMALLER CARDS */
-@media (max-width: 1200px) {
-    .hmi-container {
-        padding: 5px;
-    }
-    
-    .dashboard-header {
-        padding: 8px 15px;
-        height: 60px;
-        margin-bottom: 10px;
-    }
-    
-    .dashboard-title {
-        font-size: 1.2rem;
-    }
-    
-    .datetime {
-        font-size: 0.8rem;
-        min-width: 180px;
-        padding: 5px 10px;
-    }
-    
-    .machines-grid {
-        gap: 6px;
-        padding: 2px;
-    }
-    
-    .machine-card {
-        padding: 6px;
-    }
-    
-    .machine-id {
-        font-size: 0.9rem;
-    }
-    
-    .machine-status {
-        font-size: 0.6rem;
-        padding: 2px 6px;
-        min-width: 40px;
-    }
-    
-    .power-switch-container {
-        width: 40px;
-        height: 40px;
-        margin: 3px 0 5px 0;
-    }
-    
-    .power-switch-icon {
-        width: 20px;
-        height: 20px;
-    }
-    
-    .machine-values-section {
-        padding: 6px;
-    }
-    
-    .value-item {
-        padding: 4px;
-    }
-    
-    .value-item-label {
-        font-size: 0.55rem;
-        margin-bottom: 2px;
-    }
-    
-    .value-item-value {
-        font-size: 0.8rem;
-    }
-    
-    .efficiency-display {
-        padding: 4px;
-    }
-    
-    .efficiency-label {
-        font-size: 0.55rem;
-        margin-bottom: 2px;
-    }
-    
-    .efficiency-value {
-        font-size: 0.8rem;
-    }
-    
-    .machine-controls {
-        margin-top: 6px;
-        gap: 4px;
-    }
-    
-    .control-btn {
-        font-size: 0.65rem;
-        padding: 5px 2px;
-    }
-    
-    .footer-container {
-        padding: 8px 15px;
-        height: 70px;
-        margin-top: 8px;
-    }
-    
-    .meter-label,
-    .count-label,
-    .info-label {
-        font-size: 0.65rem;
-    }
-    
-    .meter-value,
-    .count-value {
-        font-size: 1.3rem;
-    }
-    
-    .info-value {
-        font-size: 1.1rem;
-    }
-    
-    .global-btn {
-        min-width: 80px;
-        padding: 8px 12px;
-        font-size: 0.75rem;
-    }
-    
-    .status-bar {
-        padding: 6px 15px;
-        font-size: 0.75rem;
-        margin-top: 6px;
-    }
 }

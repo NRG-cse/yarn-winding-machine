@@ -70,6 +70,45 @@
     </div>
 </div>
 
+<!-- MACHINE MODAL -->
+<div class="modal" id="machineModal">
+    <div class="modal-content">
+        <h2 id="machineModalTitle">CHANNEL CONTROL</h2>
+        <div class="modal-channel-info">
+            <span id="modalChannelName">CH01</span>
+            <span id="modalChannelStatus" class="status-active">ON</span>
+        </div>
+        
+        <div class="modal-control-section">
+            <div class="modal-control-label">SET VALUE (0-9999)</div>
+            <input type="number" id="modalSetValue" min="0" max="9999" placeholder="0000">
+            <div class="modal-control-buttons">
+                <button class="modal-btn modal-btn-set" id="modalBtnSet">SET</button>
+                <button class="modal-btn modal-btn-reset" id="modalBtnReset">RESET</button>
+            </div>
+        </div>
+        
+        <div class="modal-display-section">
+            <div class="modal-display-item">
+                <div class="modal-display-label">CURRENT VALUE</div>
+                <div class="modal-display-value" id="modalCurrentValue">1234</div>
+            </div>
+            <div class="modal-display-item">
+                <div class="modal-display-label">COUNT</div>
+                <div class="modal-display-value" id="modalCountValue">5678</div>
+            </div>
+            <div class="modal-display-item">
+                <div class="modal-display-label">EFFICIENCY</div>
+                <div class="modal-display-value efficiency" id="modalEfficiency">92%</div>
+            </div>
+        </div>
+        
+        <div class="modal-buttons">
+            <button id="modalClose">CLOSE</button>
+        </div>
+    </div>
+</div>
+
 <!-- SET VALUE MODAL -->
 <div class="modal" id="settingsModal">
     <div class="modal-content">
@@ -79,81 +118,6 @@
         <div class="modal-buttons">
             <button id="modalSave">SAVE</button>
             <button id="modalCancel">CANCEL</button>
-        </div>
-    </div>
-</div>
-
-<!-- CHANNEL CONTROLLER MODAL -->
-<div class="modal" id="channelControllerModal">
-    <div class="channel-controller-modal">
-        <div class="controller-container">
-            <div class="header">
-                <h1 id="controllerTitle">Channel Controller</h1>
-                <p id="controllerSubtitle">Control and monitor device channel</p>
-                <button class="close-controller" id="closeController">&times;</button>
-            </div>
-            
-            <div class="control-section">
-                <div class="section-title">Channel Control</div>
-                <div class="channel-selector">
-                    <div class="channel-info">
-                        <span class="channel-label" id="controllerChannelLabel">CH</span>
-                        <div class="channel-number" id="controller-channel">01</div>
-                    </div>
-                    <div class="controls">
-                        <button class="set-button" id="controller-set-button">
-                            <i class="fas fa-cog"></i> SET
-                        </button>
-                    </div>
-                    <div class="value-display" id="controller-set-value">0000</div>
-                </div>
-            </div>
-            
-            <div class="divider"></div>
-            
-            <div class="control-section">
-                <div class="section-title">Power Control</div>
-                <div class="toggle-section">
-                    <div class="toggle-container">
-                        <span class="toggle-label">ON/OFF</span>
-                        <div class="power-toggle-switch" id="controller-power-toggle">
-                            <div class="power-toggle-slider"></div>
-                        </div>
-                    </div>
-                    <div class="count-section">
-                        <span class="count-label">COUNT</span>
-                        <div class="count-value" id="controller-count-value">1234</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="divider"></div>
-            
-            <div class="control-section">
-                <div class="section-title">System Control</div>
-                <div class="reset-section">
-                    <button class="reset-button" id="controller-reset-button">
-                        <i class="fas fa-redo"></i> RESET
-                    </button>
-                    <div class="efficiency-section">
-                        <span class="efficiency-label">Efficiency</span>
-                        <div class="efficiency-value" id="controller-efficiency-value">92%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- CHANNEL SET VALUE MODAL -->
-<div class="modal" id="channelSetModal">
-    <div class="modal-content channel-set-modal">
-        <h2>SET CHANNEL VALUE</h2>
-        <p id="channelSetLabel"></p>
-        <input id="channelSetInput" type="number" min="0" max="9999" placeholder="0000">
-        <div class="modal-buttons">
-            <button id="channelSetSave">SAVE</button>
-            <button id="channelSetCancel">CANCEL</button>
         </div>
     </div>
 </div>
