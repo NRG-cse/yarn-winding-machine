@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>ETP Control Panel | Inlet & Outlet Monitor</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none; /* HMI style, prevents accidental text selection */
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 30%, #1a1a1a, #000000);
+      font-family: 'Segoe UI', 'Roboto', 'Inter', 'Poppins', system-ui, -apple-system, 'BlinkMacSystemFont', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      /* BLACK BORDER ON ALL FOUR SIDES - classic thick black framing */
+      border: 20px solid #000000;
+      box-sizing: border-box;
+    }
+
+    /* main container - no scroll, fits exactly in viewport */
+    .hmi-dashboard {
+      width: 100%;
+      max-width: 1600px;
+      height: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: stretch;
+      gap: 2rem;
+      /* no overflow, no scroll */
+      overflow: hidden;
+    }
+
+    /* each card - INLET (red) / OUTLET (red) */
+    .etp-card {
+      flex: 1 1 400px;
+      min-width: 320px;
+      background: #0f0f0f;
+      backdrop-filter: blur(2px);
+      border-radius: 2rem;
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+      padding: 1.8rem 1.5rem;
+      transition: transform 0.2s ease, box-shadow 0.2s;
+      border: 1px solid rgba(220, 60, 50, 0.4);
+      /* RED THEME both inlet & outlet as requested: "inlet and outlet lal hobe" */
+      background: linear-gradient(145deg, #1a0a0a, #0c0303);
+    }
+
+    .etp-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.8);
+      border-color: #e33b2e;
+    }
+
+    /* header style */
+    .card-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      border-bottom: 2px solid #c73e2d;
+      margin-bottom: 1.8rem;
+      padding-bottom: 0.7rem;
+      flex-wrap: wrap;
+    }
+
+    .title-section {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .badge-icon {
+      font-size: 2rem;
+      filter: drop-shadow(0 0 2px #ff3a2f);
+    }
+
+    h2 {
+      font-size: 1.9rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #ff5e4a, #e62e1c);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 4px rgba(230, 46, 28, 0.3);
+    }
+
+    .status-pulse {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(220, 50, 40, 0.2);
+      padding: 0.3rem 0.9rem;
+      border-radius: 40px;
+      backdrop-filter: blur(4px);
+    }
+
+    .led-red {
+      width: 12px;
+      height: 12px;
+      background: #ff2a1f;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #ff3b2e;
+      animation: pulseRed 1.2s infinite;
+    }
+
+    .status-text {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #ff9e8f;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* parameter grid */
+    .param-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.2rem;
+      margin: 1.8rem 0 0.8rem;
+    }
+
+    .param-item {
+      background: rgba(0, 0, 0, 0.55);
+      border-radius: 1.2rem;
+      padding: 0.9rem 0.7rem;
+      transition: all 0.2s;
+      border-left: 4px solid #dd3b2a;
+      backdrop-filter: blur(2px);
+      text-align: center;
+    }
+
+    .param-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 500;
+      letter-spacing: 1.2px;
+      color: #ffb7ae;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .param-value {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #fae2df;
+      font-family: 'JetBrains Mono', monospace, 'Segoe UI';
+      line-height: 1.2;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .param-unit {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: #ff8f7f;
+    }
+
+    .trend-indicator {
+      font-size: 0.7rem;
+      margin-left: 4px;
+      color: #ffaa99;
+    }
+
+    /* special full row for description / extra */
+    .footer-note {
+      margin-top: 1.6rem;
+      text-align: center;
+      font-size: 0.7rem;
+      color: #cc7f72;
+      border-top: 1px dashed #b33a2c;
+      padding-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    /* responsive behavior — no scroll, fit within viewport */
+    @media (max-width: 950px) {
+      body {
+        padding: 1rem;
+        border-width: 12px;
+      }
+      .etp-card {
+        padding: 1.3rem;
+      }
+      h2 {
+        font-size: 1.5rem;
+      }
+      .param-value {
+        font-size: 1.4rem;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .hmi-dashboard {
+        gap: 1.2rem;
+      }
+      .param-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8rem;
+      }
+      .card-header {
+        flex-direction: column;
+        gap: 0.7rem;
+      }
+      .status-pulse {
+        align-self: flex-start;
+      }
+      body {
+        border-width: 10px;
+      }
+    }
+
+    @media (max-width: 550px) {
+      body {
+        padding: 0.8rem;
+        border-width: 8px;
+      }
+      .param-value {
+        font-size: 1.25rem;
+      }
+      .param-label {
+        font-size: 0.7rem;
+      }
+      .etp-card {
+        min-width: 280px;
+      }
+    }
+
+    /* hide scrollbar globally & prevent overflow */
+    html, body {
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+      position: fixed;
+    }
+
+    /* custom scroll would not appear, but extra assurance */
+    .hmi-dashboard {
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: calc(100vh - 40px);
+      scrollbar-width: none; /* hide scroll for modern, but we don't want scroll at all — content fits exactly */
+    }
+    /* make sure content never triggers scroll */
+    .hmi-dashboard {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* adjust for perfect fit: cards shrink gracefully */
+    @media (max-height: 700px) {
+      .etp-card {
+        padding: 1rem 1.2rem;
+      }
+      .param-grid {
+        gap: 0.8rem;
+        margin: 1rem 0 0.3rem;
+      }
+      .param-item {
+        padding: 0.6rem 0.4rem;
+      }
+      .param-value {
+        font-size: 1.3rem;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+      .footer-note {
+        margin-top: 1rem;
+        padding-top: 0.7rem;
+      }
+    }
+
+    /* additional classic look: subtle grain texture */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* glint animation for inlet/outlet red glow */
+    @keyframes pulseRed {
+      0% { opacity: 0.4; transform: scale(0.9); box-shadow: 0 0 0 0 rgba(255, 50, 30, 0.5);}
+      70% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 0 6px rgba(255, 50, 30, 0);}
+      100% { opacity: 0.4; transform: scale(0.9); box-shadow: 0 0 0 0 rgba(255, 50, 30, 0);}
+    }
+
+    /* additional mini icon style */
+    .material-symbol {
+      font-size: 1.1rem;
+    }
+
+    /* manual responsiveness for large screens - keep cards balanced */
+    @media (min-width: 1400px) {
+      .etp-card {
+        padding: 2rem 2rem;
+      }
+      .param-value {
+        font-size: 1.9rem;
+      }
+      .param-label {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hmi-dashboard">
+  
+  <!-- INLET CARD (LAL / RED THEME) -->
+  <div class="etp-card">
+    <div class="card-header">
+      <div class="title-section">
+        <span class="badge-icon">📥</span>
+        <h2>INLET</h2>
+      </div>
+      <div class="status-pulse">
+        <div class="led-red"></div>
+        <span class="status-text">Active · Raw Feed</span>
+      </div>
+    </div>
+
+    <!-- ALL INLET PARAMETERS: comprehensive list -->
+    <div class="param-grid">
+      <div class="param-item">
+        <div class="param-label">🌊 Flow Rate</div>
+        <div class="param-value">342.6 <span class="param-unit">m³/h</span><span class="trend-indicator">▲2%</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🧪 pH Level</div>
+        <div class="param-value">7.82 <span class="param-unit">pH</span><span class="trend-indicator">● stable</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">⚗️ TSS</div>
+        <div class="param-value">285 <span class="param-unit">mg/L</span><span class="trend-indicator">▼4</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🧴 BOD</div>
+        <div class="param-value">210 <span class="param-unit">mg/L</span><span class="trend-indicator">▲7%</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🧫 COD</div>
+        <div class="param-value">480 <span class="param-unit">mg/L</span><span class="trend-indicator">▲12</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🌡️ Temperature</div>
+        <div class="param-value">32.4 <span class="param-unit">°C</span><span class="trend-indicator">▲0.3</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">💧 Conductivity</div>
+        <div class="param-value">1240 <span class="param-unit">µS/cm</span><span class="trend-indicator">▼15</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🧂 Salinity</div>
+        <div class="param-value">0.62 <span class="param-unit">ppt</span><span class="trend-indicator">●</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🟢 Turbidity</div>
+        <div class="param-value">187 <span class="param-unit">NTU</span><span class="trend-indicator">▲5%</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🧪 Ammonia</div>
+        <div class="param-value">12.3 <span class="param-unit">mg/L</span><span class="trend-indicator">▲0.9</span></div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <span>⏱️ Last update: 09:47:23</span>
+      <span>⚠️ Inlet quality: moderate load</span>
+    </div>
+  </div>
+
+  <!-- OUTLET CARD (LAL / RED THEME) -->
+  <div class="etp-card">
+    <div class="card-header">
+      <div class="title-section">
+        <span class="badge-icon">📤</span>
+        <h2>OUTLET</h2>
+      </div>
+      <div class="status-pulse">
+        <div class="led-red"></div>
+        <span class="status-text">Discharge · Treated</span>
+      </div>
+    </div>
+
+    <!-- OUTLET PARAMETERS - treated water specs -->
+    <div class="param-grid">
+      <div class="param-item">
+        <div class="param-label">🌊 Flow Rate</div>
+        <div class="param-value">338.2 <span class="param-unit">m³/h</span><span class="trend-indicator">▲1%</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🧪 pH Level</div>
+        <div class="param-value">7.21 <span class="param-unit">pH</span><span class="trend-indicator">● ideal</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">⚗️ TSS</div>
+        <div class="param-value">18.5 <span class="param-unit">mg/L</span><span class="trend-indicator">▼2.3</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🧴 BOD</div>
+        <div class="param-value">12.4 <span class="param-unit">mg/L</span><span class="trend-indicator">▼0.8</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🧫 COD</div>
+        <div class="param-value">48.7 <span class="param-unit">mg/L</span><span class="trend-indicator">▼5%</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🌡️ Temperature</div>
+        <div class="param-value">31.9 <span class="param-unit">°C</span><span class="trend-indicator">▲0.2</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">💧 Conductivity</div>
+        <div class="param-value">985 <span class="param-unit">µS/cm</span><span class="trend-indicator">▼22</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🧂 Salinity</div>
+        <div class="param-value">0.41 <span class="param-unit">ppt</span><span class="trend-indicator">▼0.05</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🟢 Turbidity</div>
+        <div class="param-value">3.2 <span class="param-unit">NTU</span><span class="trend-indicator">▼0.4</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🧪 Residual Chlorine</div>
+        <div class="param-value">0.23 <span class="param-unit">mg/L</span><span class="trend-indicator">● safe</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">🦠 Fecal Coliform</div>
+        <div class="param-value">4 <span class="param-unit">MPN/100mL</span><span class="trend-indicator">▼2</span></div>
+      </div>
+      <div class="param-item">
+        <div class="param-label">⚡ DO (Dissolved O₂)</div>
+        <div class="param-value">6.8 <span class="param-unit">mg/L</span><span class="trend-indicator">▲0.3</span></div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <span>✅ Compliance: within PCB limit</span>
+      <span>♻️ Reuse quality: Class B</span>
+    </div>
+  </div>
+</div>
+
+<!-- additional note: No scroll, full black border all sides, both cards red theme, HMI professional style -->
+</body>
+</html>
